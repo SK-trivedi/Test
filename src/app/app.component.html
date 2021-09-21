@@ -1,0 +1,228 @@
+<!-- <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+  {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+</button> -->
+<!-- [linear]="isLinear" -->
+
+
+<!-- details -->
+<mat-horizontal-stepper linear #stepper [selectedIndex]="0">
+  <mat-step [stepControl]="projectDetailsForm"  [completed]="projectDetailsForm.valid">
+    <h2>Project Details</h2>
+    <form [formGroup]="projectDetailsForm">
+      <ng-template matStepLabel>Project Details</ng-template>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Organization</mat-label>
+        <mat-select matNativeControl formControlName='organization'>
+          <mat-option value="ongOne">Organization one</mat-option>
+          <mat-option  value="orgTwo">Organization two</mat-option>
+          <mat-option value="orgThree">Organization three</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select matNativeControl formControlName='category'>
+          <mat-option value="catOne">Category one</mat-option>
+          <mat-option value="catTwo">Category two</mat-option>
+          <mat-option value="catThree">Category three</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Activity</mat-label>
+        <mat-select matNativeControl formControlName='activity'>
+          <mat-option value="actOne">Activity one</mat-option>
+          <mat-option value="actTwo">Activity two</mat-option>
+          <mat-option value="actThree">Activity three</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Title</mat-label>
+        <input matInput  formControlName="title" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Minimum Age</mat-label>
+        <input matInput  formControlName="minimumAge" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Maximum Age</mat-label>
+        <input matInput  formControlName="maximumAge" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Overview Description</mat-label>
+        <input matInput  formControlName="overviewDescription" required>
+      </mat-form-field>
+
+      <div>
+        <button mat-button matStepperNext (click)='onClickProjectDetails()'>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- gallery -->
+  <mat-step [stepControl]="projectGalleryForm" label="Fill out your address" [completed]="projectGalleryForm.valid">
+    <h2>Project Gallery</h2>
+    <form [formGroup]="projectGalleryForm">
+      <ng-template matStepLabel>Project Gallery</ng-template>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Project Name</mat-label>
+        <mat-select matNativeControl formControlName='projectName'>
+          <mat-option value="projOne">Project one</mat-option>
+          <mat-option  value="projTwo">Project two</mat-option>
+          <mat-option value="projThree">Project three</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div appearance="outline">
+        <mat-label>Project Images</mat-label>
+        <input type="file" id="files" name="files" multiple  (change)='onSelectImages($event)' ><br><br>
+      </div>
+
+      <div>
+        <img [src]="img" height="100px" *ngFor='let img of urls' style="padding:0 5px;">
+      </div>
+      <!-- <form action="/action_page.php">
+        <label for="files">Select files:</label>
+        <input type="file" id="files" name="files" multiple><br><br>
+        <input type="submit">
+      </form> -->
+
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- costs -->
+  <mat-step [stepControl]="projectCostForm" [completed]="projectCostForm.valid">
+    <h2>Project Costs</h2>
+    <form [formGroup]="projectCostForm">
+      <ng-template matStepLabel>Project Costs</ng-template>
+    
+      <mat-form-field appearance="outline">
+        <mat-label>Project Name</mat-label>
+        <mat-select matNativeControl formControlName='projectName'>
+          <mat-option value="projOne">Project one</mat-option>
+          <mat-option  value="projTwo">Project two</mat-option>
+          <mat-option value="projThree">Project three</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <div formArrayName='projectDurationAndCost'>
+        <div *ngFor='let item of getProjectDurationAndCost.controls; let i=index'>
+          <div formGroupName={{i}}> 
+            <mat-form-field appearance="fill">
+              <mat-label>Duration</mat-label>
+              <input matInput  formControlName="duration" placeholder="Enter Weeks" required>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Cost</mat-label>
+              <input matInput  formControlName="cost" placeholder="Enter Cost" required>
+            </mat-form-field>
+
+            <button type="button" (click)='removeRow(i)' *ngIf='i!=0'>Delete</button>
+          </div>
+        </div>
+
+        <button type="button" (click)='addRow()'>Add Row</button>
+      </div>
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- includes -->
+  <mat-step [stepControl]="projectIncludesForm"  [completed]="projectIncludesForm.valid">
+    <h2> Project Includes Check</h2>
+    <form [formGroup]="projectIncludesForm">
+      <ng-template matStepLabel>Project Includes</ng-template>
+
+      <!-- Project name -->
+      <mat-form-field appearance="outline">
+        <mat-label>Project Name</mat-label>
+        <mat-select matNativeControl formControlName='projectName'>
+          <mat-option value="projOne">Project one</mat-option>
+          <mat-option  value="projTwo">Project two</mat-option>
+          <mat-option value="projThree">Project three</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- incluede description -->
+      <div formArrayName='include'>
+        <div *ngFor='let item of getProjectIncludeDetails.controls; let i=index'>
+          <div formGroupName={{i}}> 
+            <mat-form-field appearance="fill">
+              <mat-label>Include Description</mat-label>
+              <input matInput  formControlName="includeDescription" placeholder="Include Description" required>
+            </mat-form-field>
+
+              <mat-radio-group aria-label="Select an option" formControlName='isIncluded'>
+                <mat-radio-button value="isIncluded">Include</mat-radio-button>
+                <mat-radio-button value="notIncluded">Not Include</mat-radio-button>
+              </mat-radio-group>
+
+            <button type="button" (click)='removeIncludeRow(i)' *ngIf='i!=0'>Delete</button>
+          </div>
+        </div>
+
+        <button type="button" (click)='addIncludeRow()'>Add Row</button>
+      </div>
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- dates -->
+  <mat-step [stepControl]="projectDatesForm" [completed]="projectDatesForm.valid">
+    <form [formGroup]="projectDatesForm">
+      <ng-template matStepLabel>Project Dates</ng-template>
+
+        <!-- Project name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Project Name</mat-label>
+          <mat-select matNativeControl formControlName='projectName'>
+            <mat-option value="projOne">Project one</mat-option>
+            <mat-option  value="projTwo">Project two</mat-option>
+            <mat-option value="projThree">Project three</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div formArrayName='projectStartDates'>
+          <div *ngFor='let item of getProjectStartDates.controls; let i=index'>
+           
+
+              <mat-form-field appearance="fill">
+                <mat-label>Choose a Project Start date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName={{i}}>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+  
+              <button type="button" (click)='removeDateRow(i)' *ngIf='i!=0'>Delete</button>
+          </div>
+  
+          <button type="button" (click)='addDateRow()'>Add Row</button>
+        </div>
+     
+    
+
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)='onclickFinish()'>Finish</button>
+      </div>
+    </form>
+  </mat-step>
+
+</mat-horizontal-stepper>
+
+<app-view [data]='finalData'></app-view>
